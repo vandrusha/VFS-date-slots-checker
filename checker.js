@@ -57,6 +57,9 @@ async function eternalChecker(values) {
     const centers = document.getElementsByClassName('mat-option-text');
     const findVCvalue = (city) => [...centers]
       .filter(center => center.innerText.toLowerCase().replace(/ /g, '') === `Poland Visa Application Center-${city}`.toLowerCase().replace(/ /g, ''))[0];
+    if (!findVCvalue(vcCity)) {
+      sendMessage('VC undefined');
+    }
     findVCvalue(vcCity).click()
 
     // category
@@ -76,6 +79,9 @@ async function eternalChecker(values) {
       const subCats = document.getElementsByClassName('mat-option-text');
       const findSubCatValue = (value) => [...subCats]
         .filter(subCat => subCat.innerText.toLowerCase().replace(/ /g, '') === value.toLowerCase().replace(/ /g, ''))[0];
+      if (!findSubCatValue(subCategory)) {
+        sendMessage('Subcategory undefined');
+      }
       findSubCatValue(subCategory).click();
 
       // set date of birth
@@ -84,11 +90,18 @@ async function eternalChecker(values) {
       document.getElementsByClassName('input-group-addon')[0].click();
       const days = document.getElementsByClassName('ngb-dp-day ng-star-inserted');
       const firstDay = [...days].filter(day => day.innerText === '1')[0];
+      if (!firstDay) {
+        sendMessage('Datepicker undefined');
+      }
       firstDay.click()
       // set nationality
       selectablePart(3).click();
       const nationalities = document.getElementsByClassName('mat-option-text');
-      [...nationalities].filter(nationality => nationality.innerText === 'BELARUS')[0].click();
+      const nationElement = [...nationalities].filter(nationality => nationality.innerText === 'BELARUS')[0];
+      if (!nationElement) {
+        sendMessage('Nationalities undefined');
+      }
+      nationElement.click();
 
       await timer(1000);
       const nextButton = document.getElementsByClassName('mat-raised-button')[0];
