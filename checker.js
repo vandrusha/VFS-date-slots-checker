@@ -87,7 +87,11 @@ async function eternalChecker(values) {
       // set date of birth
       await timer(5000);
       errorHandler();
-      document.getElementsByClassName('input-group-addon')[0].click();
+      const datepicker = document.getElementsByClassName('input-group-addon')[0];
+      if (!datepicker) {
+        sendMessage('Datepicker undefined');
+      }
+      datepicker.click();
       const days = document.getElementsByClassName('ngb-dp-day ng-star-inserted');
       const firstDay = [...days].filter(day => day.innerText === '1')[0];
       if (!firstDay) {
