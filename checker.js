@@ -1,6 +1,6 @@
 // Specify cities VC is located you want to monitor
 
-const vcCities = ['Grodno', 'Lida', 'Minsk', 'Gomel', 'Mogilev']; 
+const vcCities = ['Grodno', 'Lida', 'Minsk', 'Gomel', 'Mogilev'];
 
 // specify visa categories in for each VC you want to check
 const cityToCategoriesMap = {
@@ -27,7 +27,7 @@ const errorHandler = () => {
   if (appNotification.innerText.length > 0) {
     sendMessage('IP ban!')
   }
-   return;
+  return;
 }
 
 const sendMessage = (text) => {
@@ -55,24 +55,27 @@ async function eternalChecker(values) {
     selectablePart(0).click();
     errorHandler();
     const centers = document.getElementsByClassName('mat-option-text');
-    const findVCvalue = (city) => [...centers].filter(center => center.innerText === `Poland Visa Application Center-${city}`)[0];
+    const findVCvalue = (city) => [...centers]
+      .filter(center => center.innerText.toLowerCase().replace(/ /g, '') === `Poland Visa Application Center-${city}`.toLowerCase().replace(/ /g, ''))[0];
     findVCvalue(vcCity).click()
 
-    for (const subCategory of cityToCategoriesMap[vcCity]) {
-      // category
-      await timer(5000);
-      errorHandler();
-      selectablePart(1).click();
-      const categories = document.getElementsByClassName('mat-option-text');
-      const findCatValue = (value) => [...categories].filter(category => category.innerText === value)[0];
-      findCatValue('National Visa D').click();
+    // category
+    await timer(5000);
+    errorHandler();
+    selectablePart(1).click();
+    const categories = document.getElementsByClassName('mat-option-text');
+    const findCatValue = (value) => [...categories]
+      .filter(category => category.innerText.toLowerCase().replace(/ /g, '') === value.toLowerCase().replace(/ /g, ''))[0];
+    findCatValue('National Visa D').click();
 
+    for (const subCategory of cityToCategoriesMap[vcCity]) {
       // sub category
       await timer(5000);
       errorHandler();
       selectablePart(2).click();
       const subCats = document.getElementsByClassName('mat-option-text');
-      const findSubCatValue = (value) => [...subCats].filter(subCat => subCat.innerText === value)[0];
+      const findSubCatValue = (value) => [...subCats]
+        .filter(subCat => subCat.innerText.toLowerCase().replace(/ /g, '') === value.toLowerCase().replace(/ /g, ''))[0];
       findSubCatValue(subCategory).click();
 
       // set date of birth
@@ -94,14 +97,13 @@ async function eternalChecker(values) {
         return;
       }
       const noDatesAvailableMessage = document.getElementsByClassName('alert-info')[0]
-      if (!noDatesAvailableMessage || noDatesAvailableMessage.length === 0 || !noDatesAvailableMessage.innerText.includes('Приносим извинения'))
-      {
+      if (!noDatesAvailableMessage || noDatesAvailableMessage.length === 0 || !noDatesAvailableMessage.innerText.includes('Приносим извинения')) {
         sendMessage(messageForError);
         return;
       }
     }
   }
-  
+
   const returnLink = document.getElementsByClassName('navbar-brand cursor-pointer')[0];
   returnLink.click();
   await timer(5000);
